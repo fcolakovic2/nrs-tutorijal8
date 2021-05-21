@@ -8,7 +8,7 @@ const porrt = 3010
 
 
 export function start(){
-  let dv = new sqlite3.Database('./db/baza.db',sqlite3.OPEN_READWRITE,(err)=>{
+  let db = new sqlite3.Database('./db/baza.db',sqlite3.OPEN_READWRITE,(err)=>{
     if (err){
       return console.log(err.message)
     }
@@ -169,7 +169,30 @@ app.delete('/gradovi/:id',(req,res)=>{
 })
 
 
+export function refresujSve(){
+  let db = new sqlite3.Database('./db.baza.db',sqlite3.OPEN_READWRITE,(err)=>{
+    if (err){
+      return console.log(err.message)
+    }
+    console.log("Connected");
+  })
 
+  db.serialize(()=>{
+    db.all('SELECT NAZIV FROM grad', (err,rows,fields)=>{
+      if (err){
+        return console.log(err.message)
+      }
+      res.json(JSON.stringify(rows));
+    })
+  })
+
+  db.close((err)=>{
+    if (err){
+       return console.log(err.message)
+      }
+      console.log("Connected")
+    });
+}
 
 
 //assuming app is express Object.
