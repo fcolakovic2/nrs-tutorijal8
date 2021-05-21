@@ -4,7 +4,7 @@ const path = require('path');
 const router = express.Router();
 const sqlite3 = require('sqlite3').verbose();
 
-const porrt = 3010
+const port = 3010
 
 
 export function start(){
@@ -200,6 +200,9 @@ app.get('/',function(req,res) {
     res.sendFile(__dirname+'/index.html');
   });
 
-  app.listen(process.env.port || 3000);
 
 console.log('Running at Port 3000');
+
+var server = app.listen(3000)
+
+module.exports=server
