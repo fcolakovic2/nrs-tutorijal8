@@ -53,6 +53,66 @@ app.get('/gradovi',(req,res)=>{
 })
 
 
+app.put('/gradovi/:id', (req,res)=>{
+  const { id } = req.params;
+  //parametar dinamicki
+  let db = new sqlite3.Database('./db.baza.db',sqlite3.OPEN_READWRITE,(err)=>{
+    if (err){
+      return console.log(err.message)
+    }
+    console.log("Connected");
+  }) 
+
+  //izmedju starta i closea ide post zahtjev
+
+ db.serialize(()=>{
+   db.each(`UPDATE grad SET NAZIV = ? WHERE ID = ?`,['SARAJEVO',id],function(err){
+    if (err){
+      return console.log(err.message)
+    }
+    console.log("Connected");
+   })
+ })
+
+  db.close((err)=>{
+    if (err){
+       return console.log(err.message)
+      }
+      console.log("Connected")
+    });
+})
+
+
+app.post('/grad', (req,res)=>{
+  let db = new sqlite3.Database('./db.baza.db',sqlite3.OPEN_READWRITE,(err)=>{
+    if (err){
+      return console.log(err.message)
+    }
+    console.log("Connected");
+  }) 
+
+  //izmedju starta i closea ide post zahtjev
+
+  db.run(`INSERT INTO grad VALUES(3,'Liverpool',90)`,function(err){
+    if (err){
+      return console.log(err.message)
+     }
+     console.log("Connected")
+   });
+  
+
+  db.close((err)=>{
+    if (err){
+       return console.log(err.message)
+      }
+      console.log("Connected")
+    });
+})
+
+
+
+
+
 
 //assuming app is express Object.
 app.get('/',function(req,res) {
