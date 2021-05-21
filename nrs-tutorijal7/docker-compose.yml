@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+   reverseproxy:
+    image: reverseproxy
+    ports:
+        - 8080:8080
+    restart: always
+
+   tutorijal6:
+    depends_on:
+      - reverseproxy
+    image: getting-started
+    restart: always
+
+   defaultgetstarted:
+    depends_on:
+      - reverseproxy
+    image: defaultstart
+    ports:
+       - "8000:80"
+    restart: always
+
+
