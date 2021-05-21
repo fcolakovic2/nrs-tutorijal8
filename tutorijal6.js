@@ -25,6 +25,35 @@ export function close(){
   });
 }
 
+app.get('/gradovi/:id', (req,res)=>{
+  const { id } = req.params;
+  //parametar dinamicki
+  let db = new sqlite3.Database('./db.baza.db',sqlite3.OPEN_READWRITE,(err)=>{
+    if (err){
+      return console.log(err.message)
+    }
+    console.log("Connected");
+  }) 
+
+  //izmedju starta i closea ide post zahtjev
+
+ db.serialize(()=>{
+   db.each(`SELECT FROM grad WHERE ID = ?`,[id],function(err){
+    if (err){
+      return console.log(err.message)
+    }
+    console.log("Connected");
+   })
+ })
+
+  db.close((err)=>{
+    if (err){
+       return console.log(err.message)
+      }
+      console.log("Connected")
+    });
+})
+
 app.get('/gradovi',(req,res)=>{
   const gradovi = [];
 
@@ -109,6 +138,35 @@ app.post('/grad', (req,res)=>{
     });
 })
 
+
+app.delete('/gradovi/:id',(req,res)=>{
+  const { id } = req.params;
+  //parametar dinamicki
+  let db = new sqlite3.Database('./db.baza.db',sqlite3.OPEN_READWRITE,(err)=>{
+    if (err){
+      return console.log(err.message)
+    }
+    console.log("Connected");
+  }) 
+
+  //izmedju starta i closea ide post zahtjev
+
+ db.serialize(()=>{
+   db.each(`DELETE FROM grad WHERE ID = ?`,[id],function(err,row){
+    if (err){
+      return console.log(err.message)
+    }
+    res.json("Deleted")
+  })
+ })
+
+  db.close((err)=>{
+    if (err){
+       return console.log(err.message)
+      }
+      console.log("Connected")
+    });
+})
 
 
 
